@@ -3,17 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Eli Lilly Medicine Tracker</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="disclaimer" id="disclaimer">
         Disclaimer: All medicine names and prices used in this application are fictional and do not represent any real medicine(s).
     </div>
-    <header>
+
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+    
+
+    <header class="header">
+        <img src="Eli_Lilly_and_Company.svg.png" alt="Eli Lilly Logo" class="logo">
         <h1>Medicine Tracker</h1>
     </header>
     <main>
+        <h2><i class="fas fa-capsules"></i> List of Available Medicines</h2>
+        <ul id="medicines-list"></ul>
+
+        <h2>Add New Medicine</h2>
+        <form id="add-medicine">
+            <label for="medicine-name">Medicine Name</label>
+            <input type="text" id="medicine-name" name="name" placeholder="e.g. Paracetamol" required>
+
+            <label for="medicine-price">Price</label>
+            <input type="number" id="medicine-price" name="price" placeholder="e.g. 5.99" required step="0.01">
+
+            <button type="submit"><i class="fas fa-plus"></i>Add Medicine</button>
+        </form>
+
+        <h2>Update Medicine Price</h2>
+        <form id="update-medicine">
+            <label for="update-name">Medicine Name</label>
+            <input type="text" id="update-name" name="name" placeholder="e.g. Paracetamol" required>
+
+            <label for="update-price">New Price</label>
+            <input type="number" id="update-price" name="price" placeholder="e.g. 6.99" required step="0.01">
+
+            <button type="submit"><i class="fas fa-edit"></i>Update Medicine</button>
+        </form>
+
+        <h2>Delete Medicine</h2>
+        <form id="delete-medicine">
+            <label for="delete-name">Medicine Name</label>
+            <input type="text" id="delete-name" name="name" placeholder="e.g. Paracetamol" required>
+
+            <button type="submit"><i class="fas fa-trash"></i>Delete Medicine</button>
+        </form>
+
+        <p id="message"></p>
 
     </main>
     <script src="script.js"></script>
