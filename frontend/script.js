@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(){
     fetchMedicines();
+    fetchQuarterlyReport();
+
     handleSubmit("add-medicine", "POST", "http://localhost:8000/create");
     handleSubmit("update-medicine", "POST", "http://localhost:8000/update");
     handleSubmit("delete-medicine", "DELETE", "http://localhost:8000/delete");
@@ -87,3 +89,66 @@ function showProgressBar() {
 }
 
 document.addEventListener('DOMContentLoaded', showProgressBar);
+
+function fetchQuarterlyReport() {
+    fetch("http://localhost:8000/quarterly-report")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Failed to fetch quarterly report");
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById("total-value").textContent = data.total_value.toFixed(2);
+        document.getElementById("average-price").textContent = data.average_price.toFixed(2);
+        document.getElementById("num-of-medicines").textContent = data.num_of_medicines;
+    })
+    .catch(error => {
+        console.error("Error fetching quarterly report:", error);
+        document.getElementById("message").textContent = "Error fetching quarterly report.";
+    });
+}
+
+const deleteForm = document.getElementById("delete-medicine");
+const deleteModal = document.getElementById("delete-modal");
+const closeModal = document.getElementById("close-modal");
+const confirmDelete = document.getElementById("confirm-delete");
+const cancelDelete = document.getElementById("cancel-delete");
+
+let deleteFormData = null;
+
+deleteForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+    deleteFormData = new FormData(deleteForm);
+    deleteModal.style.display = "block";
+    console.log("Modal opened");
+});
+
+closeModal.addEventListener("click", function() {
+    deleteModal.style.display = "none";
+    console.log("Modal closed");
+});
+
+cancelDelete.addEventListener("click", function() {
+    deleteModal.style.display = "none";
+    console.log("Cancel delete action"); 
+});
+
+confirmDelete.addEventListener("click", function() {
+    if (deleteFormData) {
+        fetch("/delete-medicine", {
+            method: "POST",
+            body: deleteFormData
+        }).then(response => {
+            if (response.ok) {
+                alert("Medicine deleted successfully!");
+                window.location.reload();
+            } else {
+                alert("Failed to delete medicine.");
+            }
+        }).catch(error => {
+            console.error("Error deleting medicine:", error);
+        });
+        deleteModal.style.display = "none";
+    }
+});

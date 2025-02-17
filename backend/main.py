@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Form
 from fastapi.middleware.cors import CORSMiddleware
+
 """
 This module defines a FastAPI application for managing a list of medicines.
 It provides endpoints to retrieve all medicines, retrieve a single medicine by name,
@@ -58,7 +59,7 @@ def get_single_med(name: str):
             print(med)
             if med['name'] == name:
                 return med
-    return {"error": "Medicine not found"}
+    return data
 
 @app.post("/create")
 def create_med(name: str = Form(...), price: float = Form(...)):
@@ -125,6 +126,20 @@ def delete_med(name: str = Form(...)):
     return {"error": "Medicine not found"}
 
 # Add your average function here
+@app.get("/quarterly-report")
+def get_quarterly_report():
+    with open('data.json') as meds:
+        data = json.load(meds)
+    
+    medicines = data.get("medicines", [])
+    total_value = sum(med.get("price", 0) for med in medicines if med.get("price"))
+    average_price = total_value / len(medicines) if medicines else 0
+    
+    return {
+        "total_value": total_value,
+        "average_price": average_price,
+        "num_of_medicines": len(medicines)
+    }
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
